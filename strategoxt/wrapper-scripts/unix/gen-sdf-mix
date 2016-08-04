@@ -1,6 +1,6 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-SCRIPT=$(readlink -f $0)
-SCRIPTPATH=$(dirname $SCRIPT)
+STRJAR=$($(dirname "$0")/strategoxt-path)
 
-java -cp $SCRIPTPATH/../share/strategoxt/strategoxt.jar run org.strategoxt.tools.main-gen-sdf-mix $@
+exec java -Xss8M -cp "$STRJAR" \
+  run org.strategoxt.tools.main-gen-sdf-mix "$@"

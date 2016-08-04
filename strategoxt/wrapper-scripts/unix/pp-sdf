@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+STRJAR=$($(dirname "$0")/strategoxt-path)
+
+exec java -Xss8M -cp "$STRJAR" \
+  run org.strategoxt.tools.io-pp-sdf "$@"
