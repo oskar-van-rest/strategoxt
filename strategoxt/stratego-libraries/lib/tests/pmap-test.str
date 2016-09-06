@@ -38,13 +38,13 @@ strategies
       , pmap-put(|1,21);
         pmap-put(|1,42)
       , pmap-contains-key(|1)
-      )/*;
+      );
       pmap-apply-and-check(!"pmap add two identical elements (2)"
       , pmap-put(|1,21);
         pmap-put(|1,42)
       , pmap-get(|1);
         ?42
-      )*/
+      )
 
   test-remove =
       pmap-apply-and-check(!"pmap remove"

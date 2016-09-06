@@ -54,6 +54,14 @@ rules
   pmap-contains-key(|k) = prim("SSL_pmap_containsKey",k)
 
   /**
+   * Get the value associated with a key in the presistent map
+   *
+   * @param k - the key
+   * @type PersistentMap(K,V) -> V
+   */
+  pmap-get(|k) = prim("SSL_pmap_get",k)
+
+  /**
    * Return the keys of a persistent map as a list
    *
    * @type PersistentMap(K,V) -> List(K)
