@@ -1,0 +1,146 @@
+/**
+ * Unit tests for persistent set strategies
+ */
+module pmap-test
+imports libstratego-lib
+strategies
+
+  main-pmap-test =
+      test-suite(!"Testsuite for persistent maps",
+        test-create;
+        test-add;
+        test-remove;
+        test-keys;
+        test-values;
+        test-match;
+        test-union;
+        test-intersection;
+        test-incorporate
+    )
+
+strategies
+
+  test-create =
+    apply-and-check(!"new pmap", new-pmap, !(), is-pmap)
+
+  test-add =
+      pmap-apply-and-check(!"pmap add"
+      , pmap-put(|1,42)
+      , pmap-contains-key(|1)
+      );
+      pmap-apply-and-check(!"pmap add two"
+      , pmap-put(|1,42);
+        pmap-put(|2,42)
+      , pmap-contains-key(|1);
+        pmap-contains-key(|2)
+      );
+      pmap-apply-and-check(!"pmap add two identical elements (1)"
+      , pmap-put(|1,21);
+        pmap-put(|1,42)
+      , pmap-contains-key(|1)
+      )/*;
+      pmap-apply-and-check(!"pmap add two identical elements (2)"
+      , pmap-put(|1,21);
+        pmap-put(|1,42)
+      , pmap-get(|1);
+        ?42
+      )*/
+
+  test-remove =
+      pmap-apply-and-check(!"pmap remove"
+      , pmap-put(|1,42);
+        pmap-remove(|1)
+      , not(pmap-contains-key(|1))
+      );
+      pmap-apply-and-check(!"pmap remove 2"
+      , pmap-put(|1,42);
+        pmap-put(|2,42);
+        pmap-remove(|1)
+      , not(pmap-contains-key(|1));
+        pmap-contains-key(|2)
+      )
+
+  test-keys = 
+      pmap-apply-and-check(!"pmap keys (1)"
+      , pmap-put(|1,42);
+        pmap-put(|2,42)
+      , pmap-keys; qsort(lt);
+        ?[1, 2]
+      );
+      pmap-apply-and-check(!"pmap keys (2)"
+      , pmap-put(|1,42);
+        pmap-put(|2,42);
+        pmap-put(|3,42);
+        pmap-remove(|2);
+        pmap-put(|4,42)
+      , pmap-keys; qsort(lt);
+        ?[1, 3, 4]
+      )
+
+  test-values = 
+      pmap-apply-and-check(!"pmap values (1)"
+      , pmap-put(|1,21);
+        pmap-put(|2,42)
+      , pmap-values; qsort(lt);
+        ?[21, 42]
+      );
+      pmap-apply-and-check(!"pmap values (2)"
+      , pmap-put(|1,21);
+        pmap-put(|2,42);
+        pmap-put(|3,84);
+        pmap-remove(|2);
+        pmap-put(|4,1)
+      , pmap-values; qsort(lt);
+        ?[1, 21, 84]
+      )
+
+  test-match =
+    apply-and-check(!"eq (1)",
+      id
+    , !( <new-pmap>
+       , <new-pmap>
+       )
+    , eq
+    );
+    apply-and-check(!"eq (2)",
+      id
+    , !( <new-pmap;pmap-put(|1,21);pmap-put(|2,42)>
+       , <new-pmap;pmap-put(|2,42);pmap-put(|1,21)>
+       )
+    , eq
+    )
+
+  test-union =
+    apply-and-check(!"union (1)",
+      pmap-union(addi)
+    , !( <new-pmap;pmap-put(|1,42);pmap-put(|2,21)>
+       , <new-pmap;pmap-put(|2,21);pmap-put(|3,42)>
+       )
+    , pmap-entries; qsort((Fst,Fst);lt);
+      ?[(1,42), (2,42), (3,42)]
+    )
+
+  test-intersection =
+    apply-and-check(!"intersection (1)",
+      pmap-intersection(addi)
+    , !( <new-pmap;pmap-put(|1,42);pmap-put(|2,21)>
+       , <new-pmap;pmap-put(|2,21);pmap-put(|3,42)>
+       )
+    , pmap-entries; qsort((Fst,Fst);lt);
+      ?[(2,42)]
+    )
+
+  test-incorporate =
+    apply-and-check(!"incorporate (1)",
+      pmap-incorporate(addi)
+    , !( <new-pmap;pmap-put(|1,42);pmap-put(|2,21)>
+       , <new-pmap;pmap-put(|2,21);pmap-put(|3,42)>
+       )
+    , pmap-entries; qsort((Fst,Fst);lt);
+      ?[(1,42),(2,42)]
+    )
+
+rules
+
+  pmap-apply-and-check(n, a, c) =
+    apply-and-check(n, a, new-pmap, c)

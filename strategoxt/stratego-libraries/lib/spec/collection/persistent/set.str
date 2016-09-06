@@ -1,0 +1,81 @@
+/** This module contains strategies for persistent sets.
+ *
+ * The sets have value semantics in Stratego. Internally they are backed by
+ * persistent hash sets.
+ */
+module collection/persistent/set
+
+rules
+
+  /**
+   * Create a new persistent set
+   *
+   * @type _ -> PersistentSet(E)
+   */
+  new-pset = prim("SSL_pset_create")
+
+  /**
+   * Create a new persistent set from a list of elements
+   *
+   * @type List(E) -> PersistentSet(E)
+   */
+  new-pset-from = prim("SSL_pset_create_from")
+
+  /**
+   * Test if term is a persistent set
+   *
+   * @type PersistentSet(E) -> _
+   */
+  is-pset = prim("SSL_is_pset")
+
+  /**
+   * Add an element to the persistent set
+   *
+   * @param e - element to add
+   * @type PersistentSet(E) -> PersistentSet(E)
+   */
+  pset-add(|e) = prim("SSL_pset_add",e)
+
+  /**
+   * Remove an element from the persistent set
+   *
+   * @param e - element to remove
+   * @type PersistentSet(E) -> PersistentSet(E)
+   */
+  pset-remove(|e) = prim("SSL_pset_remove",e)
+
+  /**
+   * Test if an element is in the persistent set
+   *
+   * @param v - element to test for
+   * @type PersistentSet(E) -> PersistentSet(E)
+   */
+  pset-contains(|e) = prim("SSL_pset_contains",e)
+
+  /**
+   * Return the elements of the presistent set as a list
+   *
+   * @type PersistentSet(E) -> List(E)
+   */
+  pset-elements = prim("SSL_pset_elements")
+
+  /**
+   * Return the union of two presistent sets
+   *
+   * @type (PersistentSet(E),PersistentSet(E)) -> PersistentSet(E)
+   */
+  pset-union = prim("SSL_pset_union")
+
+  /**
+   * Return the intersection of two presistent sets
+   *
+   * @type (PersistentSet(E),PersistentSet(E)) -> PersistentSet(E)
+   */
+  pset-intersection = prim("SSL_pset_intersection")
+
+  /**
+   * Return the difference of two presistent sets
+   *
+   * @type (PersistentSet(E),PersistentSet(E)) -> PersistentSet(E)
+   */
+  pset-difference = prim("SSL_pset_difference")

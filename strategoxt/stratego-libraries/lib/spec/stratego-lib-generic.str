@@ -13,6 +13,8 @@ imports
   collection/list/set
   collection/list/sort
   collection/list/zip
+  collection/persistent/map
+  collection/persistent/set
   collection/set/indexed
   collection/tuple/common
   collection/tuple/cons

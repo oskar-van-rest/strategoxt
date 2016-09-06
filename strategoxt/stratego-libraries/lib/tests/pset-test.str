@@ -1,0 +1,130 @@
+/**
+ * Unit tests for persistent set strategies
+ */
+module pset-test
+imports libstratego-lib
+strategies
+
+  main-pset-test = 
+      test-suite(!"Testsuite for persistent sets",
+        test-create;
+        test-add;
+        test-remove;
+        test-elements;
+        test-eq;
+        test-union;
+        test-intersection;
+        test-difference
+    )
+
+strategies
+
+  test-create =
+    apply-and-check(!"new pset", new-pset, !(), is-pset)
+
+  test-add =
+      pset-apply-and-check(!"pset add"
+      , pset-add(|1)
+      , pset-contains(|1)
+      );
+      pset-apply-and-check(!"pset add two"
+      , pset-add(|1);
+        pset-add(|2)
+      , pset-contains(|1);
+        pset-contains(|2)
+      );
+      pset-apply-and-check(!"pset add two identical elements (1)"
+      , pset-add(|1);
+        pset-add(|1)
+      , pset-contains(|1)
+      );
+      pset-apply-and-check(!"pset add two identical elements (2)"
+      , pset-add(|1);
+        pset-add(|1)
+      , pset-elements;
+        ?[1]
+      )
+
+  test-remove =
+      pset-apply-and-check(!"pset remove"
+      , pset-add(|1);
+        pset-remove(|1)
+      , not(pset-contains(|1))
+      );
+      pset-apply-and-check(!"pset remove 2"
+      , pset-add(|1);
+        pset-add(|2);
+        pset-remove(|1)
+      , not(pset-contains(|1));
+        pset-contains(|2)
+      )
+
+  test-elements = 
+      pset-apply-and-check(!"pset elements (1)"
+      , pset-add(|1);
+        pset-add(|2)
+      , pset-elements; qsort(lt);
+        ?[1, 2]
+      );
+      pset-apply-and-check(!"pset elements (2)"
+      , pset-add(|1);
+        pset-add(|2);
+        pset-add(|3);
+        pset-remove(|2);
+        pset-add(|4)
+      , pset-elements; qsort(lt);
+        ?[1, 3, 4]
+      )
+
+  test-eq =
+    apply-and-check(!"eq (1)",
+      id
+    , !( <new-pset>
+       , <new-pset>
+       )
+    , eq
+    );
+    apply-and-check(!"eq (2)",
+      id
+    , !( <new-pset;pset-add(|1);pset-add(|2)>
+       , <new-pset;pset-add(|2);pset-add(|1)>
+       )
+    , eq
+    )
+
+
+  test-union =
+    apply-and-check(!"union (1)",
+      pset-union
+    , !( <new-pset;pset-add(|1);pset-add(|2)>
+       , <new-pset;pset-add(|2);pset-add(|3)>
+       )
+    , pset-elements; qsort(lt);
+      ?[1, 2, 3]
+    )
+
+  test-intersection =
+    apply-and-check(!"intersection (1)",
+      pset-intersection
+    , !( <new-pset;pset-add(|1);pset-add(|2)>
+       , <new-pset;pset-add(|2);pset-add(|3)>
+       )
+    , pset-elements; qsort(lt);
+      ?[2]
+    )
+
+  test-difference =
+    apply-and-check(!"difference (1)",
+      pset-difference
+    , !( <new-pset;pset-add(|1);pset-add(|2)>
+       , <new-pset;pset-add(|2);pset-add(|3)>
+       )
+    , pset-elements; qsort(lt);
+      ?[1]
+    )
+
+rules
+
+  pset-apply-and-check(n, a,c) =
+    apply-and-check(n, a, new-pset, c)
+  

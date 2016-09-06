@@ -1,0 +1,99 @@
+/** This module contains strategies for persistent maps.
+ *
+ * The maps have value semantics in Stratego. Internally they are backed by
+ * persistent hash maps.
+ */
+module collection/persistent/map
+
+rules
+
+  /**
+   * Create a new persistent map
+   *
+   * @type _ -> PersistentMap(K,V)
+   */
+  new-pmap = prim("SSL_pmap_create")
+
+  /**
+   * Create a new persistent map from a list of key-value paris
+   *
+   * @type List((K,V)) -> PersistentMap(K,V)
+   */
+  new-pmap-from = prim("SSL_pmap_create_from")
+
+  /**
+   * Test if the term is a persistent map
+   *
+   * @type PersistentMap(K,V) -> _
+   */
+  is-pmap = prim("SSL_is_pmap")
+
+  /**
+   * Put a value for a key in the presistent map
+   *
+   * @param k - the key the value is for
+   * @param v - the value for the key
+   * @type PersistentMap(K,V) -> PersistentMap(K,V)
+   */
+  pmap-put(|k,v) = prim("SSL_pmap_put",k,v)
+
+  /**
+   * Remove the value for a key from the presistent map
+   *
+   * @param k - the key to remove
+   * @type PersistentMap(K,V) -> PersistentMap(K,V)
+   */
+  pmap-remove(|k) = prim("SSL_pmap_remove",k)
+
+  /**
+   * Test if the presistent map contains a value for a key
+   *
+   * @param k - the key to test for
+   * @type PersistentMap(K,V) -> PersistentMap(K,V)
+   */
+  pmap-contains-key(|k) = prim("SSL_pmap_containsKey",k)
+
+  /**
+   * Return the keys of a persistent map as a list
+   *
+   * @type PersistentMap(K,V) -> List(K)
+   */
+  pmap-keys = prim("SSL_pmap_keys")
+
+  /**
+   * Return the values of a persistent map as a list
+   *
+   * @type PersistentMap(K,V) -> List(V)
+   */
+  pmap-values = prim("SSL_pmap_values")
+
+  /**
+   * Return the entries of a persistent map as a list of key-value pairs
+   *
+   * @type PersistentMap(K,V) -> List((K,V))
+   */
+  pmap-entries = prim("SSL_pmap_entries")
+
+  /**
+   * Return the union of two persistent maps
+   *
+   * @param s : (V,V) -> V - Strategy to combine values
+   * @type (PersistentMap(K,V),PersistentMap(K,V)) -> PersistentMap(K,V)
+   */
+  pmap-union(s) = prim("SSL_pmap_union",s|)
+
+  /**
+   * Return the intersection of two persistent maps
+   *
+   * @param s : (V,V) -> V - Strategy to combine values
+   * @type (PersistentMap(K,V),PersistentMap(K,V)) -> PersistentMap(K,V)
+   */
+  pmap-intersection(s) = prim("SSL_pmap_intersection",s|)
+
+  /**
+   * Incorporate the values of another set
+   *
+   * @param s : (V,V) -> V - Strategy to combine values
+   * @type (PersistentMap(K,V),PersistentMap(K,V)) -> PersistentMap(K,V)
+   */
+  pmap-incorporate(s) = prim("SSL_pmap_incorporate",s|)
