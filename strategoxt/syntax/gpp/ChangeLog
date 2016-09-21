@@ -1,3 +1,10 @@
+2016-09-21 Oskar van Rest <oskar.van.rest@oracle.com>
+
+        * Added support for optional escaping of single quotes in String
+          and optional escaping of double quotes in Char
+        * Added support for backspace (\b) and form feed (\f) characters
+          in String and Char
+
 2006-09-05  Valentin David  <valentin@ii.uib.no>
 
 	* tools3/pp2c-box-to-c.meta, tools3/pp2c-box-to-c.str,

@@ -6,9 +6,9 @@ exports
     [\-]? [0-9]+ 		-> Int
     [\-]? [0-9]+ [\.] [0-9]+ 	-> Real
     "\"" StrChar* "\"" 		-> String
-    ~[\"\\] 			-> StrChar
-    [\\] [\"tnr\\] 		-> StrChar
+    ~[\"\\] 			-> StrChar %% add the new line character (\n) to be consistent with other languages but break backwards compatibility
+    [\\] [tnrbf\"\'\\]     	-> StrChar
     "\'" CharChar "\'"		-> Char
-    ~[\']			-> CharChar
-    [\\] [\'ntr\ ]		-> CharChar
+    ~[\']			-> CharChar %% add the new line and backslash characters (\n\\) to be consistent with other languages but break backwards compatibility
+    [\\] [tnrbf\"\'\\\ ]	-> CharChar %% remove the space character (\ ) to be consistent with other languages but break backwards compatability
     Char		 	-> Id {reject}

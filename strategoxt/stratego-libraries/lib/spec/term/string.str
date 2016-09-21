@@ -249,6 +249,9 @@ strategies
     + UnEscape-linefeed
     + UnEscape-tab
     + UnEscape-carriage-return
+    + UnEscape-single-quote
+    + UnEscape-backspace
+    + Unescape-form-feed
 
   /** @internal */
   UnEscape-double-quote    : ['\', '"'  | cs ] -> ['"'  | cs ]
@@ -267,6 +270,12 @@ strategies
   
   /** @internal */
   UnEscape-tab             : ['\', 't'  | cs ] -> ['\t' | cs ]
+
+  /** @internal */
+  UnEscape-backspace       : ['\', 'b'  | cs ] -> ['\b' | cs ]
+
+  /** @internal */
+  UnEscape-form-feed       : ['\', 'f'  | cs ] -> ['\f' | cs ]
 
   /** @internal */
   UnEscape(|c) :

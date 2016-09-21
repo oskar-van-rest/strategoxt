@@ -6,7 +6,7 @@ imports
 exports
   sorts Char CharChar
   lexical syntax
-    "'" CharChar "'"		-> Char
-    ~[\']			-> CharChar
-    [\\] [\'ntr\ ]		-> CharChar
-    Char		 	-> Id {reject}
+    "'" CharChar "'"     -> Char
+    ~[\']                -> CharChar %% add the new line and backslash characters (\n\\) to be consistent with other languages but break backwards compatibility
+    [\\] [tnrbf\"\'\\\ ] -> CharChar %% remove the space character (\ ) to be consistent with other languages but break backwards compatability
+    Char                 -> Id {reject}

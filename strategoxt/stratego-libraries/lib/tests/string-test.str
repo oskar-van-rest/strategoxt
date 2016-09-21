@@ -158,6 +158,11 @@ strategies // for testing escape strategies
     , !["\" \\\\\\n\\\\t\""]
     , !["\" \\\n\\t\""]
     )
+  ; apply-test(!"unescapte-test5"
+    , [unescape]
+    , !["\"\\b\\f\\'\""]
+    , !["\"\b\f\'\""]
+    )
     
 strategies
 
